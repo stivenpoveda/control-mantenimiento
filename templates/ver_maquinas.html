@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Máquinas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Ver Máquinas</h1>
+        
+        <!-- Formulario para filtrar las máquinas -->
+        <form action="/ver_maquinas" method="get" class="d-flex mb-4">
+            <div class="form-group me-2">
+                <label for="filtro_nombre">Filtrar por Nombre</label>
+                <input type="text" class="form-control" id="filtro_nombre" name="filtro_nombre" value="{{ filtro_nombre }}">
+            </div>
+            <div class="form-group me-2">
+                <label for="filtro_tipo">Filtrar por Tipo</label>
+                <select class="form-select" id="filtro_tipo" name="filtro_tipo">
+                    <option value="" {% if not filtro_tipo %}selected{% endif %}>Todos los tipos</option>
+                    <option value="Arcade" {% if filtro_tipo == 'Arcade' %}selected{% endif %}>Arcade</option>
+                    <option value="Simulador" {% if filtro_tipo == 'Simulador' %}selected{% endif %}>Simulador</option>
+                    <option value="Carrusel" {% if filtro_tipo == 'Carrusel' %}selected{% endif %}>Carrusel</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-secondary align-self-end">Ver Máquinas</button>
+        </form>
+        
+        <!-- Tabla de máquinas -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Ciudad</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if maquinas %}
+                    {% for maquina in maquinas %}
+                        <tr>
+                            <td>{{ maquina.id }}</td>
+                            <td>{{ maquina.nombre }}</td>
+                            <td>{{ maquina.tipo }}</td>
+                            <td>{{ maquina.ciudad }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">No se encontraron máquinas con los filtros aplicados.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        
+        <form action="{{ url_for('dashboard') }}" method="get">
+            <button type="submit" class="btn btn-primary">Volver al Dashboard</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Mantenimiento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #00274d, #004080);
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-shadow: 2px 2px 5px #000000;
+        }
+        .form-control, .form-select, textarea {
+            background-color: #f5f5f5;
+            color: #00274d;
+        }
+        .form-control::placeholder, textarea::placeholder {
+            color: #999999;
+        }
+        .btn-primary {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+        }
+        .btn-primary:hover {
+            background-color: #004080;
+            border-color: #004080;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8);
+            margin-top: 50px;
+        }
+        label {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Registrar Mantenimiento</h2>
+        <form method="POST">
+            <!-- Seleccionar Ciudad -->
+            <div class="mb-3">
+                <label for="ciudad" class="form-label">Ciudad</label>
+                <select class="form-select" id="ciudad" name="ciudad" required>
+                    <option value="">Selecciona una ciudad</option>
+                    {% for ciudad in ciudades %}
+                        <option value="{{ ciudad }}">{{ ciudad }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Seleccionar Máquina -->
+            <div class="mb-3" id="maquina-container" style="display: none;">
+                <label for="maquina_nombre" class="form-label">Nombre de la Máquina</label>
+                <select class="form-select" id="maquina_nombre" name="maquina_nombre" required>
+                    <option value="">Selecciona una máquina</option>
+                </select>
+            </div>
+
+            <!-- Descripción del Mantenimiento -->
+            <div class="mb-3">
+                <label for="mantenimiento" class="form-label">Descripción del Mantenimiento</label>
+                <textarea class="form-control" id="mantenimiento" name="mantenimiento" rows="4" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Registrar Mantenimiento</button>
+        </form>
+        <form action="{{ url_for('dashboard') }}" method="get" class="mt-3">
+            <button type="submit" class="btn btn-primary w-100">Volver al Dashboard</button>
+        </form>
+    </div>
+
+    <script>
+        // Cuando se selecciona una ciudad, se obtienen las máquinas correspondientes
+        $('#ciudad').change(function() {
+            var ciudad = $(this).val();
+            if (ciudad) {
+                $.get('/get_maquinas/' + ciudad, function(data) {
+                    var maquinas = data.maquinas;
+                    $('#maquina_nombre').empty();  // Limpiar opciones anteriores
+                    $('#maquina_nombre').append('<option value="">Selecciona una máquina</option>');
+                    maquinas.forEach(function(maquina) {
+                        $('#maquina_nombre').append('<option value="' + maquina.nombre + '">' + maquina.nombre + '</option>');
+                    });
+                    $('#maquina-container').show();  // Mostrar el contenedor de máquinas
+                });
+            } else {
+                $('#maquina-container').hide();  // Ocultar el contenedor de máquinas
+            }
+        });
+    </script>
+</body>
+</html>

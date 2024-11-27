@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes de Mantenimiento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h3 {
+            color: #0d47a1;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select, button {
+            background-color: #f1f8ff;
+            border: 1px solid #0d47a1;
+            border-radius: 5px;
+            color: #0d47a1;
+            padding: 8px;
+            width: 100%;
+        }
+
+        button {
+            background-color: #0d47a1;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0b3954;
+        }
+
+        .table {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+        }
+
+        .table th, .table td {
+            text-align: center;
+        }
+
+        .table th {
+            background-color: #bbdefb;
+        }
+
+        .text-muted {
+            color: #5f6368;
+        }
+
+        .btn-primary {
+            background-color: #0d47a1;
+            border-color: #0d47a1;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b3954;
+            border-color: #0b3954;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #0d47a1;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Reportes de Mantenimiento</h1>
+
+        <!-- Formulario para seleccionar las fechas y la ciudad -->
+        <form method="POST" action="{{ url_for('reportes') }}">
+            <div class="form-group">
+                <label for="fecha_inicio">Fecha de inicio:</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha_fin">Fecha de fin:</label>
+                <input type="date" id="fecha_fin" name="fecha_fin" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ciudad">Ciudad:</label>
+                <select id="ciudad" name="ciudad" required>
+                    {% for ciudad in ciudades %}
+                    <option value="{{ ciudad }}">{{ ciudad }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg">Generar reporte</button>
+        </form>
+
+        <!-- Mostrar el reporte si existe -->
+        {% if report %}
+            <h3 class="mt-4">Reporte de Mantenimiento</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Máquina</th>
+                            <th>Mantenimiento</th>
+                            <th>Fecha</th>
+                            <th>Usuario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in report %}
+                            <tr>
+                                <td>{{ item.maquina_nombre or 'No disponible' }}</td>
+                                <td>{{ item.mantenimiento or 'No disponible' }}</td>
+                                <td>{{ item.fecha.strftime('%Y-%m-%d') if item.fecha else 'No disponible' }}</td>
+                                <td>{{ item.usuario.username if item.usuario else 'No asignado' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Botón para descargar el PDF con los filtros aplicados -->
+            <div class="text-center mt-4">
+                <a href="{{ url_for('descargar_pdf', fecha_inicio=fecha_inicio, fecha_fin=fecha_fin, ciudad=ciudad_seleccionada) }}" class="btn btn-primary btn-lg">
+                    Descargar PDF
+                </a>
+            </div>
+        {% else %}
+            <p class="mt-4 text-center text-muted">No se han encontrado registros para las fechas y ciudad seleccionadas.</p>
+        {% endif %}
+    </div>
+
+    <!-- Scripts de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

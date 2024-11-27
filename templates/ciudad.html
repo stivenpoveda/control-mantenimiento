@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Ciudad y Máquinas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #001f3f, #005f9f);
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+        h2 {
+            color: #ffffff;
+            text-shadow: 2px 2px 4px #000000;
+        }
+        .form-control, .form-select {
+            background-color: #ffffff;
+            color: #001f3f;
+        }
+        .form-control::placeholder {
+            color: #a0a0a0;
+        }
+        .btn-primary {
+            background-color: #005f9f;
+            border-color: #005f9f;
+            box-shadow: 2px 2px 6px #000000;
+        }
+        .btn-primary:hover {
+            background-color: #004070;
+            border-color: #004070;
+        }
+        .btn-secondary {
+            background-color: #004070;
+            border-color: #004070;
+            color: #ffffff;
+        }
+        .btn-secondary:hover {
+            background-color: #002040;
+            border-color: #002040;
+        }
+        .container {
+            background-color: rgba(0, 31, 63, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.7);
+        }
+        small {
+            color: #a0d8f0;
+        }
+    </style>
+    <script>
+        function agregarCampoMaquina() {
+            const contenedorMaquinas = document.getElementById('contenedor-maquinas');
+            const nuevoCampo = document.createElement('input');
+            nuevoCampo.setAttribute('type', 'text');
+            nuevoCampo.setAttribute('name', 'maquinas[]');
+            nuevoCampo.setAttribute('class', 'form-control mt-2');
+            nuevoCampo.setAttribute('placeholder', 'Nombre de la Máquina');
+            contenedorMaquinas.appendChild(nuevoCampo);
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Agregar Ciudad y Máquinas</h2>
+        <form action="/ciudad" method="post">
+            <!-- Ciudad -->
+            <div class="mb-3">
+                <label for="ciudad" class="form-label">Nombre de la Ciudad</label>
+                <input type="text" class="form-control" id="ciudad" name="ciudad" required>
+            </div>
+
+            <!-- Tipo de Máquina -->
+            <div class="mb-3">
+                <label for="tipo" class="form-label">Tipo de Máquina</label>
+                <select class="form-select" id="tipo" name="tipo">
+                    <option value="" selected disabled>Selecciona un tipo existente</option>
+                    <option value="video">Video</option>
+                    <option value="Redencion">Redención</option>
+                    <option value="Kiddies">Kiddies</option>
+                    <option value="Premio directo">Premio Directo</option>
+                    <option value="Realidad virtual">Realidad Virtual</option>
+                    <option value="Masivas">Masivas</option>
+                </select>
+            </div>
+
+            <!-- Crear Nuevo Tipo -->
+            <div class="mb-3">
+                <label for="nuevo_tipo" class="form-label">Crear Nuevo Tipo</label>
+                <input type="text" class="form-control" id="nuevo_tipo" name="tipo" placeholder="Nuevo tipo de máquina">
+                <small>Si llenas este campo, se usará como tipo y se ignorará la selección anterior.</small>
+            </div>
+
+            <!-- Nombres de las Máquinas -->
+            <div id="contenedor-maquinas">
+                <label class="form-label">Nombre de las Máquinas</label>
+                <input type="text" class="form-control mt-2" name="maquinas[]" placeholder="Nombre de la Máquina" required>
+            </div>
+            <button type="button" class="btn btn-secondary mt-2" onclick="agregarCampoMaquina()">Agregar otra máquina</button>
+
+            <!-- Botón de guardar -->
+            <button type="submit" class="btn btn-primary mt-3">Guardar Ciudad y Máquinas</button>
+        </form>
+        <form action="{{ url_for('dashboard') }}" method="get">
+            <button type="submit" class="btn btn-primary mt-3">Volver al Dashboard</button>
+        </form>
+    </div>
+</body>
+</html>
