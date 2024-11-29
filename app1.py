@@ -11,8 +11,9 @@ from io import BytesIO
 from sqlalchemy import distinct
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'mi_secreto_super_seguro'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/controlm'
+#app.config['SECRET_KEY'] = 'mi_secreto_super_seguro'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/controlm'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://kevinmaster:Cu1121822307.@kevinmaster.mysql.pythonanywhere-services.com/kevinmaster$controlm'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)

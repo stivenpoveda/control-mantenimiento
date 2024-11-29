@@ -38,4 +38,5 @@ class Mantenimiento(db.Model):
 
     # Relaciones
     usuario = db.relationship('Usuario', backref='mantenimiento')
+    
    
